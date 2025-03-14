@@ -1,0 +1,5 @@
+.accent {
+  background-color: #f87171; /* Tailwind의 bg-red-400에 해당 */
+  border: 1px solid #ef4444; /* Tailwind의 border-red-500에 해당 */
+  border-style: solid; /* Tailwind의 border-solid에 해당 */
+}
