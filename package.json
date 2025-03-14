@@ -1,0 +1,14 @@
+{
+  "name": "react-style-visualizer",
+  "version": "1.0.0",
+  "description": "A React component visualization tool that helps you inspect and debug component styles by highlighting className regions and style mappings",
+  "main": "index.js",
+  "repository": "https://github.com/teawon/react-style-visualizer",
+  "author": "teawon",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "typescript": "^5.8.2"
+  }
+}
