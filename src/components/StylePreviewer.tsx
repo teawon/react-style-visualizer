@@ -1,8 +1,11 @@
 import { useState, useMemo, useCallback } from "react";
-import type { StylePreviewerProps } from "../types";
+import type { StylePreviewerProps, ClassInfo } from "../types";
 import React from "react";
 
-const StylePreviewer = ({ element, classInfo }: StylePreviewerProps) => {
+const StylePreviewer = <T extends Record<string, ClassInfo>>({
+  children,
+  classInfo,
+}: StylePreviewerProps<T>) => {
   const accentStyles = "accent";
 
   const [toggleMode, setToggleMode] = useState<"hover" | "click">("hover");
@@ -13,6 +16,13 @@ const StylePreviewer = ({ element, classInfo }: StylePreviewerProps) => {
     name: "",
     type: "className",
   });
+
+  const keys = Object.keys(classInfo).reduce((acc, key) => {
+    acc[key as keyof T] = key as keyof T;
+    return acc;
+  }, {} as { [K in keyof T]: K });
+
+  const element = children(keys);
 
   const handleMouseEnter = (
     className: string,
@@ -70,15 +80,14 @@ const StylePreviewer = ({ element, classInfo }: StylePreviewerProps) => {
             : el.props.className,
         classNames:
           selectedClassName.type === "classNames" &&
-          el.props.classNames &&
           el.key === selectedClassName.name.split(".")[0]
             ? {
-                ...el.props.classNames,
+                ...(el.props.classNames || {}),
                 [classNamesTarget]: `${
-                  el.props.classNames[classNamesTarget] || ""
+                  el.props.classNames?.[classNamesTarget] || ""
                 } ${accentStyles}`.trim(),
               }
-            : el.props.classNames,
+            : el.props.classNames || {},
         children: el.props.children
           ? React.Children.map(el.props.children, (child) =>
               React.isValidElement(child) ? applySelectedStyle(child) : child

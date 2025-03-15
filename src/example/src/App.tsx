@@ -62,42 +62,24 @@ const App = () => {
         content: "",
       },
     },
-  };
-
-  const compositionElement = (props: typeof compositionClassInfo) => (
-    <MyComponent>
-      <MyComponent.Title
-        key="MyComponent.Title"
-        className={props["MyComponent.Title"].className}
-      >
-        title
-      </MyComponent.Title>
-      <MyComponent.Description
-        key="MyComponent.Description"
-        className={props["MyComponent.Description"].className}
-      >
-        description
-      </MyComponent.Description>
-      <MyComponent.Content
-        key="MyComponent.Content"
-        className={props["MyComponent.Content"].className}
-      >
-        <TestComponent
-          key="TestComponent"
-          className={props.TestComponent.className}
-          classNames={props.TestComponent.classNames}
-        />
-      </MyComponent.Content>
-    </MyComponent>
-  );
+  } as const;
 
   return (
-    <div className="p-8 bg-gray-100 min-h-screen">
-      <StylePreviewer
-        element={compositionElement(compositionClassInfo)}
-        classInfo={compositionClassInfo}
-      />
-    </div>
+    <StylePreviewer classInfo={compositionClassInfo}>
+      {(keys) => (
+        <MyComponent>
+          <MyComponent.Title key={keys["MyComponent.Title"]}>
+            title
+          </MyComponent.Title>
+          <MyComponent.Description key={keys["MyComponent.Description"]}>
+            description
+          </MyComponent.Description>
+          <MyComponent.Content key={keys["MyComponent.Content"]}>
+            <TestComponent key={keys.TestComponent} />
+          </MyComponent.Content>
+        </MyComponent>
+      )}
+    </StylePreviewer>
   );
 };
 
