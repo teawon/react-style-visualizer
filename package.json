@@ -1,6 +1,6 @@
 {
   "name": "react-style-visualizer",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A React component visualization tool that helps you inspect and debug component styles by highlighting className regions and style mappings",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
