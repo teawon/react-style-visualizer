@@ -64,19 +64,26 @@ const App = () => {
     },
   };
 
-  // TODO 합성컴포넌트의 경우 처리 방안 모색 필요
   const compositionElement = (props: typeof compositionClassInfo) => (
     <MyComponent>
-      <MyComponent.Title className={props["MyComponent.Title"].className}>
+      <MyComponent.Title
+        key="MyComponent.Title"
+        className={props["MyComponent.Title"].className}
+      >
         title
       </MyComponent.Title>
       <MyComponent.Description
+        key="MyComponent.Description"
         className={props["MyComponent.Description"].className}
       >
         description
       </MyComponent.Description>
-      <MyComponent.Content className={props["MyComponent.Content"].className}>
+      <MyComponent.Content
+        key="MyComponent.Content"
+        className={props["MyComponent.Content"].className}
+      >
         <TestComponent
+          key="TestComponent"
           className={props.TestComponent.className}
           classNames={props.TestComponent.classNames}
         />
@@ -84,27 +91,12 @@ const App = () => {
     </MyComponent>
   );
 
-  const singleClassInfo = {
-    classNames: ["title", "content"],
-  };
-
-  const SingleElement = () => (
-    <TestComponent
-      className=""
-      classNames={{
-        title: "",
-        content: "",
-      }}
-    />
-  );
-
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
-      {/* <StylePreviewer
+      <StylePreviewer
         element={compositionElement(compositionClassInfo)}
         classInfo={compositionClassInfo}
-      /> */}
-      <StylePreviewer element={SingleElement()} classInfo={singleClassInfo} />
+      />
     </div>
   );
 };
