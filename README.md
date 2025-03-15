@@ -1,12 +1,3 @@
-# style-scope-viewer
+# react-style-visualizer
 
-1. changeset 환경 및 배포 환경 설정
-
-2. 일단 돌아가는 코드 만들어보기
-   - 테스트 페이지
-   - 실제 사용하는 부분만 배포 할 수 있도록 환경 분리
-3. 배포 테스트
-
-4. README 작성
-
-5. npm 배포 관련된 문서에도 설정
+A React component visualization tool that helps you inspect and debug component styles by highlighting className regions and style mappings

@@ -3,17 +3,24 @@
   "version": "1.0.0",
   "description": "A React component visualization tool that helps you inspect and debug component styles by highlighting className regions and style mappings",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "repository": "https://github.com/teawon/react-style-visualizer",
   "author": "teawon",
   "license": "MIT",
   "private": false,
+  "type": "module",
+  "files": [
+    "dist"
+  ],
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
+    "@changesets/cli": "^2.28.1",
     "@types/node": "^20.11.24",
     "@types/react": "^18.2.61",
     "@types/react-dom": "^18.2.19",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.17",
+    "bunchee": "^6.4.0",
     "postcss": "^8.4.35",
     "typescript": "^5.3.3",
     "vite": "^5.1.4"
@@ -24,7 +31,6 @@
   },
   "scripts": {
     "dev": "vite src/example",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "bunchee"
   }
 }
