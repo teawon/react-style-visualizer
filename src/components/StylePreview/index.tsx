@@ -1,5 +1,9 @@
 import { StylePreviewerProvider } from "./context";
-import { HighlightedStyleElement, ClassSelectList } from "./ui";
+import {
+  HighlightedStyleElement,
+  ClassSelectList,
+  ModeToggleButton,
+} from "./ui";
 import type { StylePreviewerProps, ClassInfo } from "./type";
 
 const StylePreviewer = <T extends Record<string, ClassInfo>>({
@@ -18,7 +22,6 @@ const StylePreviewer = <T extends Record<string, ClassInfo>>({
     <StylePreviewerProvider>
       <div style={{ display: "flex", gap: "20px", padding: "20px" }}>
         <div
-          id="style-previewer-root"
           style={{
             display: "flex",
             padding: "20px",
@@ -44,6 +47,9 @@ const StylePreviewer = <T extends Record<string, ClassInfo>>({
             overflowY: "auto",
           }}
         >
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <ModeToggleButton />
+          </div>
           <ClassSelectList classInfo={classInfo} />
         </div>
       </div>

@@ -18,19 +18,19 @@ export const HighlightedStyleElement: React.FC<{
 
   const applySelectedStyle = (el: React.ReactElement): React.ReactElement => {
     const [target, classNamesTarget] =
-      state?.type === "classNames"
-        ? [state?.elementKey, state?.propertyName]
-        : [state?.elementKey, ""];
+      state?.classState?.type === "classNames"
+        ? [state?.classState?.elementKey, state?.classState?.propertyName]
+        : [state?.classState?.elementKey, ""];
 
     const isTargetElement = el.key === target;
 
     const updatedClassName = applyAccentStyle(
       el.props.className,
-      isTargetElement && state?.type === "className"
+      isTargetElement && state?.classState?.type === "className"
     );
 
     const updatedClassNames =
-      state?.type === "classNames" && isTargetElement
+      state?.classState?.type === "classNames" && isTargetElement
         ? {
             ...(el.props.classNames || {}),
             [classNamesTarget]: applyAccentStyle(

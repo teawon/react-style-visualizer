@@ -7,16 +7,33 @@ const stylePreviewerReducer = (
 ): StylePreviewerState => {
   switch (action.type) {
     case "SET_CLASSNAME":
-      return action.payload;
+      return {
+        mode: state.mode,
+        classState: action.payload,
+      };
     case "SET_CLASSNAMES":
-      return action.payload;
-    case "RESET":
-      return null;
+      return {
+        mode: state.mode,
+        classState: action.payload,
+      };
+    case "RESET_STATE":
+      return {
+        mode: state.mode,
+        classState: null,
+      };
+    case "TOGGLE_MODE":
+      return {
+        mode: state.mode === "hover" ? "click" : "hover",
+        classState: state.classState,
+      };
     default:
       return state;
   }
 };
 
 export const useStylePreviewerReducer = () => {
-  return useReducer(stylePreviewerReducer, null);
+  return useReducer(stylePreviewerReducer, {
+    mode: "hover",
+    classState: null,
+  });
 };

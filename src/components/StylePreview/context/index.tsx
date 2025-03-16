@@ -8,7 +8,10 @@ type StylePreviewerContextType = {
 };
 
 const StylePreviewerContext = createContext<StylePreviewerContextType>({
-  state: null,
+  state: {
+    mode: "hover",
+    classState: null,
+  },
   dispatch: () => {},
 });
 

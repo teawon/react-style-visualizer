@@ -9,6 +9,8 @@ export type StylePreviewerProps<T extends Record<string, ClassInfo>> = {
   children: (keys: { [K in keyof T]: K }) => React.ReactElement;
 };
 
+export type InteractionMode = "hover" | "click";
+
 type DefaultState = null;
 
 type ClassNameState = {
@@ -22,12 +24,13 @@ type ClassNamesState = {
   propertyName: string;
 };
 
-export type StylePreviewerState =
-  | ClassNameState
-  | ClassNamesState
-  | DefaultState;
+export type StylePreviewerState = {
+  mode: InteractionMode;
+  classState: ClassNameState | ClassNamesState | DefaultState;
+};
 
 export type Action =
   | { type: "SET_CLASSNAME"; payload: ClassNameState }
   | { type: "SET_CLASSNAMES"; payload: ClassNamesState }
-  | { type: "RESET" };
+  | { type: "RESET_STATE" }
+  | { type: "TOGGLE_MODE" };

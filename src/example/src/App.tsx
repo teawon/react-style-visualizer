@@ -4,7 +4,7 @@ type TChild = {
   children: React.ReactNode;
 };
 
-const TestComponent = ({
+const CompositionComponent = ({
   className,
   classNames,
 }: {
@@ -55,7 +55,7 @@ const App = () => {
     "MyComponent.Content": {
       className: "",
     },
-    TestComponent: {
+    CompositionComponent: {
       className: "",
       classNames: {
         title: "",
@@ -75,7 +75,7 @@ const App = () => {
             description
           </MyComponent.Description>
           <MyComponent.Content key={keys["MyComponent.Content"]}>
-            <TestComponent key={keys.TestComponent} />
+            <CompositionComponent key={keys.CompositionComponent} />
           </MyComponent.Content>
         </MyComponent>
       )}

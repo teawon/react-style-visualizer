@@ -9,7 +9,13 @@ interface ClassInfoListProps {
 export const ClassSelectList = ({ classInfo }: ClassInfoListProps) => {
   const { state, dispatch } = useStylePreviewer();
 
-  const handleMouseEnter = (props: Exclude<StylePreviewerState, null>) => {
+  const handleMouseEnter = (
+    props: Exclude<StylePreviewerState["classState"], null>
+  ) => {
+    if (state?.mode === "click") {
+      return;
+    }
+
     if (props.type === "className") {
       dispatch({
         type: "SET_CLASSNAME",
@@ -18,16 +24,47 @@ export const ClassSelectList = ({ classInfo }: ClassInfoListProps) => {
       return;
     }
 
-    const [elementKey, propertyName] = props.elementKey.split(".");
-
     dispatch({
       type: "SET_CLASSNAMES",
-      payload: { elementKey, type: props.type, propertyName },
+      payload: {
+        elementKey: props.elementKey,
+        type: props.type,
+        propertyName: props.propertyName,
+      },
     });
   };
 
   const handleMouseLeave = () => {
-    dispatch({ type: "RESET" });
+    if (state?.mode === "click") {
+      return;
+    }
+
+    dispatch({ type: "RESET_STATE" });
+  };
+
+  const handleClick = (
+    props: Exclude<StylePreviewerState["classState"], null>
+  ) => {
+    if (state?.mode === "hover") {
+      return;
+    }
+
+    if (props.type === "className") {
+      dispatch({
+        type: "SET_CLASSNAME",
+        payload: { elementKey: props.elementKey, type: props.type },
+      });
+      return;
+    }
+
+    dispatch({
+      type: "SET_CLASSNAMES",
+      payload: {
+        elementKey: props.elementKey,
+        type: props.type,
+        propertyName: props.propertyName,
+      },
+    });
   };
 
   return (
@@ -38,12 +75,14 @@ export const ClassSelectList = ({ classInfo }: ClassInfoListProps) => {
           <ClassItem
             name={key}
             isSelected={
-              state?.elementKey === key && state?.type === "className"
+              state?.classState?.elementKey === key &&
+              state?.classState?.type === "className"
             }
             onMouseEnter={() =>
               handleMouseEnter({ elementKey: key, type: "className" })
             }
             onMouseLeave={handleMouseLeave}
+            onClick={() => handleClick({ elementKey: key, type: "className" })}
           />
           {value.classNames && (
             <div
@@ -58,18 +97,25 @@ export const ClassSelectList = ({ classInfo }: ClassInfoListProps) => {
                   key={propertyName}
                   name={`classNames.${propertyName}`}
                   isSelected={
-                    state?.elementKey === key &&
-                    state?.type === "classNames" &&
-                    state?.propertyName === propertyName
+                    state?.classState?.elementKey === key &&
+                    state?.classState?.type === "classNames" &&
+                    state?.classState?.propertyName === propertyName
                   }
                   onMouseEnter={() =>
                     handleMouseEnter({
-                      elementKey: `${key}.${propertyName}`,
+                      elementKey: key,
                       type: "classNames",
                       propertyName: propertyName,
                     })
                   }
                   onMouseLeave={handleMouseLeave}
+                  onClick={() =>
+                    handleClick({
+                      elementKey: key,
+                      type: "classNames",
+                      propertyName: propertyName,
+                    })
+                  }
                 />
               ))}
             </div>
@@ -85,15 +131,19 @@ const ClassItem = ({
   isSelected,
   onMouseEnter,
   onMouseLeave,
+  onClick,
 }: {
   name: string;
   isSelected: boolean;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
+  onClick: () => void;
 }) => (
   <div
     onMouseEnter={onMouseEnter}
     onMouseLeave={onMouseLeave}
+    onClick={onClick}
+    onKeyUp={(e) => e.key === "Enter" && onClick()}
     style={{
       padding: "8px",
       border: "1px solid #ccc",
