@@ -34,33 +34,44 @@ const StylePreviewer = <T extends Record<string, ClassInfo>>({
     setSelectedClassName(null);
   };
 
+  const applyAccentStyle = useCallback(
+    (currentClassName: string | undefined, shouldApplyAccent: boolean) => {
+      return `${currentClassName || ""} ${
+        shouldApplyAccent ? accentStyles : ""
+      }`.trim();
+    },
+    []
+  );
+
   const applySelectedStyle = useCallback(
     (el: React.ReactElement): React.ReactElement => {
-      const isSelected = el.key === selectedClassName?.name;
-
-      const classNamesTarget =
+      const [target, classNamesTarget] =
         selectedClassName?.type === "classNames"
-          ? selectedClassName.name.split(".")[1]
-          : "";
+          ? selectedClassName.name.split(".")
+          : [selectedClassName?.name, ""];
+
+      const isTargetElement = el.key === target;
+
+      const updatedClassName = applyAccentStyle(
+        el.props.className,
+        isTargetElement && selectedClassName?.type === "className"
+      );
+
+      const updatedClassNames =
+        selectedClassName?.type === "classNames" && isTargetElement
+          ? {
+              ...(el.props.classNames || {}),
+              [classNamesTarget]: applyAccentStyle(
+                el.props.classNames?.[classNamesTarget],
+                true
+              ),
+            }
+          : el.props.classNames || {};
 
       const newProps = {
         ...el.props,
-        className:
-          selectedClassName?.type === "className"
-            ? `${el.props.className || ""} ${
-                isSelected ? accentStyles : ""
-              }`.trim()
-            : el.props.className,
-        classNames:
-          selectedClassName?.type === "classNames" &&
-          el.key === selectedClassName?.name.split(".")[0]
-            ? {
-                ...(el.props.classNames || {}),
-                [classNamesTarget]: `${
-                  el.props.classNames?.[classNamesTarget] || ""
-                } ${accentStyles}`.trim(),
-              }
-            : el.props.classNames || {},
+        className: updatedClassName,
+        classNames: updatedClassNames,
         children: el.props.children
           ? React.Children.map(el.props.children, (child) =>
               React.isValidElement(child) ? applySelectedStyle(child) : child
@@ -70,7 +81,7 @@ const StylePreviewer = <T extends Record<string, ClassInfo>>({
 
       return React.cloneElement(el, newProps);
     },
-    [selectedClassName]
+    [selectedClassName, applyAccentStyle]
   );
 
   const styledElement = useMemo(
@@ -78,6 +89,7 @@ const StylePreviewer = <T extends Record<string, ClassInfo>>({
     [element, applySelectedStyle]
   );
 
+  // TODO divide css
   return (
     <div style={{ display: "flex", gap: "20px", padding: "20px" }}>
       <div

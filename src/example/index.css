@@ -1,5 +1,5 @@
 .accent {
-  background-color: #edaeae82;
-  border: 2px solid #ff0000;
-  border-style: solid;
+  background-color: #edaeae82 !important;
+  border: 2px solid #ff0000 !important;
+  border-style: solid !important;
 }
