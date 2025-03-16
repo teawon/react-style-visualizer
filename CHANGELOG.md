@@ -1,5 +1,12 @@
 # react-style-visualizer
 
+## 0.1.0
+
+### Minor Changes
+
+- 86e58eb: toggle and click functionality
+- 61d8d5f: Refactored the component to support composition-style classNames, improving compatibility and flexibility.
+
 ## 0.0.1
 
 ### Patch Changes
