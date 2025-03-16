@@ -5,9 +5,8 @@ import React from "react";
 const StylePreviewer = <T extends Record<string, ClassInfo>>({
   children,
   classInfo,
+  accentClassName = "accent",
 }: StylePreviewerProps<T>) => {
-  const accentStyles = "accent";
-
   const [selectedClassName, setSelectedClassName] = useState<{
     name: string;
     type: "className" | "classNames";
@@ -37,10 +36,10 @@ const StylePreviewer = <T extends Record<string, ClassInfo>>({
   const applyAccentStyle = useCallback(
     (currentClassName: string | undefined, shouldApplyAccent: boolean) => {
       return `${currentClassName || ""} ${
-        shouldApplyAccent ? accentStyles : ""
+        shouldApplyAccent ? accentClassName : ""
       }`.trim();
     },
-    []
+    [accentClassName]
   );
 
   const applySelectedStyle = useCallback(
