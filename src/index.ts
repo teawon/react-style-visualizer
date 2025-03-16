@@ -1,1 +1,1 @@
-export { default as StylePreviewer } from "./components/StylePreviewer";
+export { default as StylePreviewer } from "./components/StylePreview";
