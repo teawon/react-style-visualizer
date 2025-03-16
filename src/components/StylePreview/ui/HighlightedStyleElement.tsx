@@ -5,7 +5,7 @@ export const HighlightedStyleElement: React.FC<{
   element: React.ReactElement;
   accentClassName: string;
 }> = ({ element, accentClassName }) => {
-  const { selectedClassName } = useStylePreviewer();
+  const { state } = useStylePreviewer();
 
   const applyAccentStyle = useCallback(
     (currentClassName: string | undefined, shouldApplyAccent: boolean) => {
@@ -18,19 +18,19 @@ export const HighlightedStyleElement: React.FC<{
 
   const applySelectedStyle = (el: React.ReactElement): React.ReactElement => {
     const [target, classNamesTarget] =
-      selectedClassName?.type === "classNames"
-        ? selectedClassName.name.split(".")
-        : [selectedClassName?.name, ""];
+      state?.type === "classNames"
+        ? [state?.elementKey, state?.propertyName]
+        : [state?.elementKey, ""];
 
     const isTargetElement = el.key === target;
 
     const updatedClassName = applyAccentStyle(
       el.props.className,
-      isTargetElement && selectedClassName?.type === "className"
+      isTargetElement && state?.type === "className"
     );
 
     const updatedClassNames =
-      selectedClassName?.type === "classNames" && isTargetElement
+      state?.type === "classNames" && isTargetElement
         ? {
             ...(el.props.classNames || {}),
             [classNamesTarget]: applyAccentStyle(

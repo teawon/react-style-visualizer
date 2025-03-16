@@ -1,4 +1,5 @@
 import { useStylePreviewer } from "../context";
+import type { StylePreviewerState } from "../type";
 import type { ClassInfo } from "../type";
 
 interface ClassInfoListProps {
@@ -6,17 +7,27 @@ interface ClassInfoListProps {
 }
 
 export const ClassSelectList = ({ classInfo }: ClassInfoListProps) => {
-  const { selectedClassName, setSelectedClassName } = useStylePreviewer();
+  const { state, dispatch } = useStylePreviewer();
 
-  const handleMouseEnter = (
-    className: string,
-    type: "className" | "classNames"
-  ) => {
-    setSelectedClassName({ name: className, type });
+  const handleMouseEnter = (props: Exclude<StylePreviewerState, null>) => {
+    if (props.type === "className") {
+      dispatch({
+        type: "SET_CLASSNAME",
+        payload: { elementKey: props.elementKey, type: props.type },
+      });
+      return;
+    }
+
+    const [elementKey, propertyName] = props.elementKey.split(".");
+
+    dispatch({
+      type: "SET_CLASSNAMES",
+      payload: { elementKey, type: props.type, propertyName },
+    });
   };
 
   const handleMouseLeave = () => {
-    setSelectedClassName(null);
+    dispatch({ type: "RESET" });
   };
 
   return (
@@ -26,8 +37,12 @@ export const ClassSelectList = ({ classInfo }: ClassInfoListProps) => {
           <h3 style={{ marginBottom: "10px" }}>{key}</h3>
           <ClassItem
             name={key}
-            isSelected={selectedClassName?.name === key}
-            onMouseEnter={() => handleMouseEnter(key, "className")}
+            isSelected={
+              state?.elementKey === key && state?.type === "className"
+            }
+            onMouseEnter={() =>
+              handleMouseEnter({ elementKey: key, type: "className" })
+            }
             onMouseLeave={handleMouseLeave}
           />
           {value.classNames && (
@@ -38,13 +53,21 @@ export const ClassSelectList = ({ classInfo }: ClassInfoListProps) => {
                 paddingTop: "10px",
               }}
             >
-              {Object.entries(value.classNames).map(([subKey, _]) => (
+              {Object.entries(value.classNames).map(([propertyName, _]) => (
                 <ClassItem
-                  key={subKey}
-                  name={`classNames.${subKey}`}
-                  isSelected={selectedClassName?.name === `${key}.${subKey}`}
+                  key={propertyName}
+                  name={`classNames.${propertyName}`}
+                  isSelected={
+                    state?.elementKey === key &&
+                    state?.type === "classNames" &&
+                    state?.propertyName === propertyName
+                  }
                   onMouseEnter={() =>
-                    handleMouseEnter(`${key}.${subKey}`, "classNames")
+                    handleMouseEnter({
+                      elementKey: `${key}.${propertyName}`,
+                      type: "classNames",
+                      propertyName: propertyName,
+                    })
                   }
                   onMouseLeave={handleMouseLeave}
                 />

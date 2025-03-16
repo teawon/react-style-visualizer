@@ -1,35 +1,22 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  type PropsWithChildren,
-} from "react";
+import { createContext, useContext, type PropsWithChildren } from "react";
+import { useStylePreviewerReducer } from "../hooks";
+import type { Action, StylePreviewerState } from "../type";
 
 type StylePreviewerContextType = {
-  selectedClassName: { name: string; type: "className" | "classNames" } | null;
-  setSelectedClassName: React.Dispatch<
-    React.SetStateAction<{
-      name: string;
-      type: "className" | "classNames";
-    } | null>
-  >;
+  state: StylePreviewerState;
+  dispatch: React.Dispatch<Action>;
 };
 
 const StylePreviewerContext = createContext<StylePreviewerContextType>({
-  selectedClassName: null,
-  setSelectedClassName: () => {},
+  state: null,
+  dispatch: () => {},
 });
 
 export const StylePreviewerProvider = ({ children }: PropsWithChildren) => {
-  const [selectedClassName, setSelectedClassName] = useState<{
-    name: string;
-    type: "className" | "classNames";
-  } | null>(null);
+  const [state, dispatch] = useStylePreviewerReducer();
 
   return (
-    <StylePreviewerContext.Provider
-      value={{ selectedClassName, setSelectedClassName }}
-    >
+    <StylePreviewerContext.Provider value={{ state, dispatch }}>
       {children}
     </StylePreviewerContext.Provider>
   );
