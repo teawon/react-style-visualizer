@@ -1,57 +1,99 @@
-import { useState, cloneElement } from "react";
-import type { StylePreviewerProps } from "../types";
+import { useState, useMemo, useCallback } from "react";
+import type { StylePreviewerProps, ClassInfo } from "../types";
+import React from "react";
 
-const StylePreviewer = ({ element, classInfo }: StylePreviewerProps) => {
+const StylePreviewer = <T extends Record<string, ClassInfo>>({
+  children,
+  classInfo,
+}: StylePreviewerProps<T>) => {
   const accentStyles = "accent";
 
-  const [toggleMode, setToggleMode] = useState<"hover" | "click">("hover");
-  const [selectedClassName, setSelectedClassName] = useState("");
+  const [selectedClassName, setSelectedClassName] = useState<{
+    name: string;
+    type: "className" | "classNames";
+  } | null>(null);
 
-  const handleMouseEnter = (className: string) => {
-    if (toggleMode !== "hover") return;
-    setSelectedClassName(className);
+  const keys = Object.keys(classInfo).reduce((acc, key) => {
+    acc[key as keyof T] = key as keyof T;
+    return acc;
+  }, {} as { [K in keyof T]: K });
+
+  const element = children(keys);
+
+  const handleMouseEnter = (
+    className: string,
+    type: "className" | "classNames"
+  ) => {
+    setSelectedClassName({
+      name: className,
+      type: type,
+    });
   };
 
   const handleMouseLeave = () => {
-    if (toggleMode !== "hover") return;
-    setSelectedClassName("");
+    setSelectedClassName(null);
   };
 
-  const handleClick = (className: string) => {
-    if (toggleMode !== "click") return;
-    if (selectedClassName === className) {
-      setSelectedClassName("");
-      return;
-    }
-    setSelectedClassName(className);
-  };
+  const applyAccentStyle = useCallback(
+    (currentClassName: string | undefined, shouldApplyAccent: boolean) => {
+      return `${currentClassName || ""} ${
+        shouldApplyAccent ? accentStyles : ""
+      }`.trim();
+    },
+    []
+  );
 
-  const applyHoverStyle = (
-    targetClassName: Record<string, string> | string
-  ) => {
-    if (typeof targetClassName === "object") {
-      return Object.fromEntries(
-        Object.entries(targetClassName).map(([key, value]) => [
-          key,
-          `${value} ${selectedClassName === key ? accentStyles : ""}`,
-        ])
+  const applySelectedStyle = useCallback(
+    (el: React.ReactElement): React.ReactElement => {
+      const [target, classNamesTarget] =
+        selectedClassName?.type === "classNames"
+          ? selectedClassName.name.split(".")
+          : [selectedClassName?.name, ""];
+
+      const isTargetElement = el.key === target;
+
+      const updatedClassName = applyAccentStyle(
+        el.props.className,
+        isTargetElement && selectedClassName?.type === "className"
       );
-    }
 
-    return `${targetClassName} ${
-      selectedClassName === "className" ? accentStyles : ""
-    }`;
-  };
+      const updatedClassNames =
+        selectedClassName?.type === "classNames" && isTargetElement
+          ? {
+              ...(el.props.classNames || {}),
+              [classNamesTarget]: applyAccentStyle(
+                el.props.classNames?.[classNamesTarget],
+                true
+              ),
+            }
+          : el.props.classNames || {};
 
-  const clonedTarget = cloneElement(element, {
-    className: applyHoverStyle(element.props.className),
-    classNames: applyHoverStyle(element.props.classNames),
-    subComponents: applyHoverStyle(element.props.subComponents),
-  });
+      const newProps = {
+        ...el.props,
+        className: updatedClassName,
+        classNames: updatedClassNames,
+        children: el.props.children
+          ? React.Children.map(el.props.children, (child) =>
+              React.isValidElement(child) ? applySelectedStyle(child) : child
+            )
+          : el.props.children,
+      };
 
+      return React.cloneElement(el, newProps);
+    },
+    [selectedClassName, applyAccentStyle]
+  );
+
+  const styledElement = useMemo(
+    () => applySelectedStyle(element),
+    [element, applySelectedStyle]
+  );
+
+  // TODO divide css
   return (
     <div style={{ display: "flex", gap: "20px", padding: "20px" }}>
       <div
+        id="style-previewer-root"
         style={{
           display: "flex",
           padding: "20px",
@@ -62,7 +104,7 @@ const StylePreviewer = ({ element, classInfo }: StylePreviewerProps) => {
           justifyContent: "center",
         }}
       >
-        {clonedTarget}
+        {styledElement}
       </div>
       <div
         style={{
@@ -74,99 +116,58 @@ const StylePreviewer = ({ element, classInfo }: StylePreviewerProps) => {
           overflowY: "auto",
         }}
       >
-        <div style={{ marginBottom: "20px" }}>
-          <label>
-            <input
-              type="radio"
-              name="toggleMode"
-              value="hover"
-              checked={toggleMode === "hover"}
-              onChange={() => setToggleMode("hover")}
-            />
-            Hover
-          </label>
-          <label style={{ marginLeft: "10px" }}>
-            <input
-              type="radio"
-              name="toggleMode"
-              value="click"
-              checked={toggleMode === "click"}
-              onChange={() => setToggleMode("click")}
-            />
-            Click
-          </label>
-        </div>
-
-        <div style={{ marginBottom: "20px" }}>
-          <div
-            onMouseEnter={() => handleMouseEnter("className")}
-            onMouseLeave={handleMouseLeave}
-            onClick={() => handleClick("className")}
-            onKeyUp={(e) => e.key === "Enter" && handleClick("className")}
-            style={{
-              padding: "8px",
-              border: "1px solid #ccc",
-              borderRadius: "4px",
-              marginBottom: "4px",
-              cursor: "pointer",
-              backgroundColor:
-                selectedClassName === "className" ? "#f0f0f0" : "transparent",
-            }}
-          >
-            className
-          </div>
-        </div>
-        {classInfo.classNames && (
-          <div>
-            <h3 style={{ marginBottom: "10px" }}>ClassNames 내부 속성</h3>
-            {Object.values(classInfo.classNames).map((className) => (
+        {Object.entries(classInfo).map(([key, value]) => (
+          <div key={key}>
+            <h3 style={{ marginBottom: "10px" }}>{key}</h3>
+            <div
+              onMouseEnter={() => handleMouseEnter(key, "className")}
+              onMouseLeave={handleMouseLeave}
+              style={{
+                padding: "8px",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+                marginBottom: "4px",
+                cursor: "pointer",
+                backgroundColor:
+                  selectedClassName?.name === key ? "#f0f0f0" : "transparent",
+              }}
+            >
+              {"className"}
+            </div>
+            {value.classNames && (
               <div
-                key={className}
-                onMouseEnter={() => handleMouseEnter(className)}
-                onMouseLeave={handleMouseLeave}
-                onClick={() => handleClick(className)}
-                onKeyUp={(e) => e.key === "Enter" && handleClick(className)}
                 style={{
-                  padding: "8px",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
-                  marginBottom: "4px",
-                  cursor: "pointer",
-                  backgroundColor:
-                    selectedClassName === className ? "#f0f0f0" : "transparent",
+                  borderTop: "1px solid #eee",
+                  marginTop: "10px",
+                  paddingTop: "10px",
                 }}
               >
-                {className}
+                {Object.entries(value.classNames).map(([subKey, _]) => (
+                  <div
+                    key={subKey}
+                    onMouseEnter={() =>
+                      handleMouseEnter(`${key}.${subKey}`, "classNames")
+                    }
+                    onMouseLeave={handleMouseLeave}
+                    style={{
+                      padding: "8px",
+                      border: "1px solid #ccc",
+                      borderRadius: "4px",
+                      marginBottom: "4px",
+                      cursor: "pointer",
+                      backgroundColor:
+                        selectedClassName?.name === `${key}.${subKey}`
+                          ? "#f0f0f0"
+                          : "transparent",
+                    }}
+                  >
+                    classNames.{subKey}
+                  </div>
+                ))}
               </div>
-            ))}
+            )}
           </div>
-        )}
-
-        {classInfo.subComponents && (
-          <div>
-            <h3 style={{ marginBottom: "10px" }}>subComponents</h3>
-            {Object.values(classInfo.subComponents).map((className) => (
-              <div
-                key={className}
-                onMouseEnter={() => handleMouseEnter(className)}
-                onMouseLeave={handleMouseLeave}
-                onClick={() => handleClick(className)}
-                onKeyUp={(e) => e.key === "Enter" && handleClick(className)}
-                style={{
-                  padding: "8px",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
-                  marginBottom: "4px",
-                  cursor: "pointer",
-                  backgroundColor:
-                    selectedClassName === className ? "#f0f0f0" : "transparent",
-                }}
-              >
-                {className}
-              </div>
-            ))}
-          </div>
-        )}
+        ))}
       </div>
     </div>
   );

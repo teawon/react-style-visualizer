@@ -62,50 +62,24 @@ const App = () => {
         content: "",
       },
     },
-  };
-
-  // TODO 합성컴포넌트의 경우 처리 방안 모색 필요
-  const compositionElement = (props: typeof compositionClassInfo) => (
-    <MyComponent>
-      <MyComponent.Title className={props["MyComponent.Title"].className}>
-        title
-      </MyComponent.Title>
-      <MyComponent.Description
-        className={props["MyComponent.Description"].className}
-      >
-        description
-      </MyComponent.Description>
-      <MyComponent.Content className={props["MyComponent.Content"].className}>
-        <TestComponent
-          className={props.TestComponent.className}
-          classNames={props.TestComponent.classNames}
-        />
-      </MyComponent.Content>
-    </MyComponent>
-  );
-
-  const singleClassInfo = {
-    classNames: ["title", "content"],
-  };
-
-  const SingleElement = () => (
-    <TestComponent
-      className=""
-      classNames={{
-        title: "",
-        content: "",
-      }}
-    />
-  );
+  } as const;
 
   return (
-    <div className="p-8 bg-gray-100 min-h-screen">
-      {/* <StylePreviewer
-        element={compositionElement(compositionClassInfo)}
-        classInfo={compositionClassInfo}
-      /> */}
-      <StylePreviewer element={SingleElement()} classInfo={singleClassInfo} />
-    </div>
+    <StylePreviewer classInfo={compositionClassInfo}>
+      {(keys) => (
+        <MyComponent>
+          <MyComponent.Title key={keys["MyComponent.Title"]}>
+            title
+          </MyComponent.Title>
+          <MyComponent.Description key={keys["MyComponent.Description"]}>
+            description
+          </MyComponent.Description>
+          <MyComponent.Content key={keys["MyComponent.Content"]}>
+            <TestComponent key={keys.TestComponent} />
+          </MyComponent.Content>
+        </MyComponent>
+      )}
+    </StylePreviewer>
   );
 };
 
