@@ -1,3 +1,5 @@
+import "./index.css";
+
 import { StylePreviewerProvider } from "./context";
 import {
   HighlightedStyleElement,
