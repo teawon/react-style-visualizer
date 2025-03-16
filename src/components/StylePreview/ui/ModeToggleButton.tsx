@@ -23,6 +23,9 @@ export const ModeToggleButton = () => {
       >
         <span
           style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             padding: "6px 12px",
             borderRadius: "20px",
             fontSize: "14px",
@@ -37,6 +40,9 @@ export const ModeToggleButton = () => {
         </span>
         <span
           style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             width: "40px",
             padding: "6px 12px",
             borderRadius: "20px",

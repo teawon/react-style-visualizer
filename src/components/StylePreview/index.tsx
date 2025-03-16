@@ -9,7 +9,7 @@ import type { StylePreviewerProps, ClassInfo } from "./type";
 const StylePreviewer = <T extends Record<string, ClassInfo>>({
   children,
   classInfo,
-  accentClassName = "accent",
+  accentClassName = "react-style-previewer-accent",
 }: StylePreviewerProps<T>) => {
   const element = children(
     Object.keys(classInfo).reduce((acc, key) => {
@@ -47,7 +47,15 @@ const StylePreviewer = <T extends Record<string, ClassInfo>>({
             overflowY: "auto",
           }}
         >
-          <div style={{ display: "flex", justifyContent: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              position: "sticky",
+              top: 0,
+              zIndex: 1,
+            }}
+          >
             <ModeToggleButton />
           </div>
           <ClassSelectList classInfo={classInfo} />
