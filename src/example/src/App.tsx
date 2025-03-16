@@ -1,4 +1,4 @@
-import StylePreviewer from "../../components/StylePreviewer";
+import StylePreviewer from "../../components/StylePreview";
 
 type TChild = {
   children: React.ReactNode;
