@@ -60,3 +60,5 @@ const App = () => {
 ![Image](https://github.com/user-attachments/assets/f22163b1-9fea-4c37-8f43-64e184426793)
 
 ## Contributing
+
+We warmly welcome pull requests and encourage you to use [GitHub issues](https://github.com/teawon/react-style-visualizer/issues) for submitting feature requests and reporting bugs.
