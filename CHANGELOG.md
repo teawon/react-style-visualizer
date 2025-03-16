@@ -1,5 +1,11 @@
 # react-style-visualizer
 
+## 0.1.1
+
+### Patch Changes
+
+- 21157a9: fix accent style not effect
+
 ## 0.1.0
 
 ### Minor Changes
