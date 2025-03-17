@@ -1,5 +1,7 @@
+import React, { type ReactNode } from "react";
+
 type TChild = {
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
 export const CompositionComponent = ({

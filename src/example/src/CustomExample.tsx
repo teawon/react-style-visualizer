@@ -1,3 +1,4 @@
+import React from "react";
 import StylePreviewer from "../../components/StylePreview";
 import {
   CompositionComponent,
