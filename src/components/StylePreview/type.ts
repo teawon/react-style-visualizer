@@ -27,6 +27,7 @@ type ClassNamesState = {
 export type StylePreviewerState = {
   mode: InteractionMode;
   classState: ClassNameState | ClassNamesState | DefaultState;
+  element: React.ReactElement;
 };
 
 export type Action =

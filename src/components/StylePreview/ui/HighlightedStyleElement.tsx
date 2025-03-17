@@ -1,10 +1,11 @@
 import React, { useCallback } from "react";
 import { useStylePreviewer } from "../context";
 
-export const HighlightedStyleElement: React.FC<{
-  element: React.ReactElement;
-  accentClassName: string;
-}> = ({ element, accentClassName }) => {
+export const HighlightedStyleElement = ({
+  accentClassName = "react-style-previewer-accent",
+}: {
+  accentClassName?: string;
+}) => {
   const { state } = useStylePreviewer();
 
   const applyAccentStyle = useCallback(
@@ -54,5 +55,5 @@ export const HighlightedStyleElement: React.FC<{
     return React.cloneElement(el, newProps);
   };
 
-  return applySelectedStyle(element);
+  return applySelectedStyle(state.element);
 };
