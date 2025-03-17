@@ -22,7 +22,7 @@ const StylePreviewer = <T extends Record<string, ClassInfo>>({
         <div className={styles.classController}>
           <div className={styles.modeToggleContainer}>
             <ModeToggleController>
-              {(mode, toggleMode) => (
+              {({ mode, toggleMode }) => (
                 <div
                   className={styles.modeToggle}
                   onClick={toggleMode}
@@ -50,13 +50,13 @@ const StylePreviewer = <T extends Record<string, ClassInfo>>({
             </ModeToggleController>
           </div>
           <ClassController>
-            {(
+            {({
               mode,
               classInfo,
               selectedClass,
               updateClassState,
-              resetClassState
-            ) => (
+              resetClassState,
+            }) => (
               <div>
                 {Object.entries(classInfo).map(([key, value]) => {
                   const handleMouseLeave = () => {

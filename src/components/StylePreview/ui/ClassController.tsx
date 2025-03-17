@@ -2,15 +2,15 @@ import { useStylePreviewer } from "../context";
 import type { ClassInfo, StylePreviewerState } from "../type";
 
 type ClassControllerProps = {
-  children: (
-    mode: "hover" | "click",
-    classInfo: Record<string, ClassInfo>,
-    selectedClass: StylePreviewerState["classState"],
+  children: (props: {
+    mode: "hover" | "click";
+    classInfo: Record<string, ClassInfo>;
+    selectedClass: StylePreviewerState["classState"];
     updateClassState: (
       props: Exclude<StylePreviewerState["classState"], null>
-    ) => void,
-    resetClassState: () => void
-  ) => React.ReactNode;
+    ) => void;
+    resetClassState: () => void;
+  }) => React.ReactNode;
 };
 
 export const ClassController = ({ children }: ClassControllerProps) => {
@@ -44,13 +44,13 @@ export const ClassController = ({ children }: ClassControllerProps) => {
 
   return (
     <>
-      {children(
-        state.mode,
+      {children({
+        mode: state.mode,
         classInfo,
-        state.classState,
+        selectedClass: state.classState,
         updateClassState,
-        resetClassState
-      )}
+        resetClassState,
+      })}
     </>
   );
 };

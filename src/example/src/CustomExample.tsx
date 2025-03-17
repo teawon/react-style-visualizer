@@ -29,13 +29,12 @@ export const CustomExample = () => {
         <div>
           <StylePreviewer.HighlightedStyleElement />
           <StylePreviewer.ClassController>
-            {(
-              _,
+            {({
               classInfo,
               selectedClass,
               updateClassState,
-              resetClassState
-            ) => (
+              resetClassState,
+            }) => (
               <div>
                 {Object.entries(classInfo).map(([key, value]) => (
                   <div
