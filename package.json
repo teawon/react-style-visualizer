@@ -26,7 +26,6 @@
     "@types/react-dom": "^18.2.19",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.17",
-    "bunchee": "^6.4.0",
     "postcss": "^8.4.35",
     "typescript": "^5.3.3",
     "vite": "^5.1.4"
@@ -37,7 +36,7 @@
   },
   "scripts": {
     "dev": "vite src/example",
-    "build": "bunchee",
+    "build": "vite build",
     "release": "changeset publish"
   }
 }
