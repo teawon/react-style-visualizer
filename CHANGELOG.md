@@ -1,5 +1,15 @@
 # react-style-visualizer
 
+## 0.3.0
+
+### Minor Changes
+
+- 8ace364: add headdless mode
+
+### Patch Changes
+
+- 451b0c3: rollback bunchee and delete style.module
+
 ## 0.2.2
 
 ### Patch Changes
