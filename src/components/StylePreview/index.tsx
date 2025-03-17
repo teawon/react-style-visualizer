@@ -1,3 +1,4 @@
+import React from "react";
 import { StylePreviewerProvider } from "./context";
 import {
   HighlightedStyleElement,
@@ -5,6 +6,7 @@ import {
   ModeToggleController,
 } from "./ui";
 import type { StylePreviewerProps, ClassInfo } from "./type";
+import styles from "./StylePreviewer.module.css";
 
 const StylePreviewer = <T extends Record<string, ClassInfo>>({
   children,
@@ -13,51 +15,16 @@ const StylePreviewer = <T extends Record<string, ClassInfo>>({
 }: StylePreviewerProps<T>) => {
   return (
     <StylePreviewerProvider element={children} classInfo={classInfo}>
-      <div style={{ display: "flex", gap: "20px", padding: "20px" }}>
-        <div
-          style={{
-            display: "flex",
-            padding: "20px",
-            border: "1px solid #ddd",
-            borderRadius: "8px",
-            minWidth: "500px",
-            alignContent: "center",
-            justifyContent: "center",
-          }}
-        >
+      <div className={styles.container}>
+        <div className={styles.highlightedElement}>
           <HighlightedStyleElement accentClassName={accentClassName} />
         </div>
-        <div
-          style={{
-            minWidth: "500px",
-            padding: "20px",
-            border: "1px solid #ddd",
-            borderRadius: "8px",
-            maxHeight: "400px",
-            overflowY: "auto",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              position: "sticky",
-              top: 0,
-              zIndex: 1,
-            }}
-          >
+        <div className={styles.classController}>
+          <div className={styles.modeToggleContainer}>
             <ModeToggleController>
               {(mode, toggleMode) => (
                 <div
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    backgroundColor: "#e4e4e7",
-                    padding: "4px",
-                    borderRadius: "24px",
-                    cursor: "pointer",
-                    position: "relative",
-                  }}
+                  className={styles.modeToggle}
                   onClick={toggleMode}
                   role="switch"
                   aria-checked={mode === "click"}
@@ -65,38 +32,16 @@ const StylePreviewer = <T extends Record<string, ClassInfo>>({
                   onKeyUp={(e) => e.key === "Enter" && toggleMode()}
                 >
                   <span
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: "6px 12px",
-                      borderRadius: "20px",
-                      fontSize: "14px",
-                      fontWeight: 500,
-                      width: "40px",
-                      color: mode === "hover" ? "#fff" : "#71717a",
-                      backgroundColor:
-                        mode === "hover" ? "#3b82f6" : "transparent",
-                      transition: "all 0.3s ease",
-                    }}
+                    className={`${styles.modeSpan} ${
+                      mode === "hover" ? styles.modeSpanHover : ""
+                    }`}
                   >
                     Hover
                   </span>
                   <span
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: "40px",
-                      padding: "6px 12px",
-                      borderRadius: "20px",
-                      fontSize: "14px",
-                      fontWeight: 500,
-                      color: mode === "click" ? "#fff" : "#71717a",
-                      backgroundColor:
-                        mode === "click" ? "#0fba4b" : "transparent",
-                      transition: "all 0.3s ease",
-                    }}
+                    className={`${styles.modeSpan} ${
+                      mode === "click" ? styles.modeSpanClick : ""
+                    }`}
                   >
                     Click
                   </span>
@@ -216,14 +161,9 @@ const ClassItem = ({
     onMouseLeave={onMouseLeave}
     onClick={onClick}
     onKeyUp={(e) => e.key === "Enter" && onClick()}
-    style={{
-      padding: "8px",
-      border: "1px solid #ccc",
-      borderRadius: "4px",
-      marginBottom: "4px",
-      cursor: "pointer",
-      backgroundColor: isSelected ? "#f0f0f0" : "transparent",
-    }}
+    className={`${styles.classItem} ${
+      isSelected ? styles.classItemSelected : ""
+    }`}
   >
     {name}
   </div>
