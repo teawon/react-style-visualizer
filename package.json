@@ -1,6 +1,6 @@
 {
   "name": "react-style-visualizer",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "A React component visualization tool that helps you inspect and debug component styles by highlighting className regions and style mappings",
   "keywords": [
     "react",
