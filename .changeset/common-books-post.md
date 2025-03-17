@@ -2,4 +2,4 @@
 "react-style-visualizer": patch
 ---
 
-build setting
+build error

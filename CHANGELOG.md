@@ -1,5 +1,11 @@
 # react-style-visualizer
 
+## 0.2.1
+
+### Patch Changes
+
+- 5b8342d: edit build setting
+
 ## 0.2.0
 
 ### Minor Changes
