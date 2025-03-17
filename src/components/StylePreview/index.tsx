@@ -143,6 +143,11 @@ const StylePreviewer = <T extends Record<string, ClassInfo>>({
 
 export default StylePreviewer;
 
+StylePreviewer.Provider = StylePreviewerProvider;
+StylePreviewer.ModeToggleController = ModeToggleController;
+StylePreviewer.ClassController = ClassController;
+StylePreviewer.HighlightedStyleElement = HighlightedStyleElement;
+
 const ClassItem = ({
   name,
   isSelected,
