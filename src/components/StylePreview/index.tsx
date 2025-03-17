@@ -1,5 +1,3 @@
-import "./index.css";
-
 import { StylePreviewerProvider } from "./context";
 import {
   HighlightedStyleElement,
@@ -13,15 +11,8 @@ const StylePreviewer = <T extends Record<string, ClassInfo>>({
   classInfo,
   accentClassName = "react-style-previewer-accent",
 }: StylePreviewerProps<T>) => {
-  const element = children(
-    Object.keys(classInfo).reduce((acc, key) => {
-      acc[key as keyof T] = key as keyof T;
-      return acc;
-    }, {} as { [K in keyof T]: K })
-  );
-
   return (
-    <StylePreviewerProvider>
+    <StylePreviewerProvider element={children} classInfo={classInfo}>
       <div style={{ display: "flex", gap: "20px", padding: "20px" }}>
         <div
           style={{
@@ -34,10 +25,7 @@ const StylePreviewer = <T extends Record<string, ClassInfo>>({
             justifyContent: "center",
           }}
         >
-          <HighlightedStyleElement
-            element={element}
-            accentClassName={accentClassName}
-          />
+          <HighlightedStyleElement accentClassName={accentClassName} />
         </div>
         <div
           style={{
