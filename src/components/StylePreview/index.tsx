@@ -2,7 +2,7 @@ import { StylePreviewerProvider } from "./context";
 import {
   HighlightedStyleElement,
   ClassSelectList,
-  ModeToggleButton,
+  ModeToggleController,
 } from "./ui";
 import type { StylePreviewerProps, ClassInfo } from "./type";
 
@@ -46,9 +46,65 @@ const StylePreviewer = <T extends Record<string, ClassInfo>>({
               zIndex: 1,
             }}
           >
-            <ModeToggleButton />
+            <ModeToggleController>
+              {(mode, toggleMode) => (
+                <div
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    backgroundColor: "#e4e4e7",
+                    padding: "4px",
+                    borderRadius: "24px",
+                    cursor: "pointer",
+                    position: "relative",
+                  }}
+                  onClick={toggleMode}
+                  role="switch"
+                  aria-checked={mode === "click"}
+                  tabIndex={0}
+                  onKeyUp={(e) => e.key === "Enter" && toggleMode()}
+                >
+                  <span
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "6px 12px",
+                      borderRadius: "20px",
+                      fontSize: "14px",
+                      fontWeight: 500,
+                      width: "40px",
+                      color: mode === "hover" ? "#fff" : "#71717a",
+                      backgroundColor:
+                        mode === "hover" ? "#3b82f6" : "transparent",
+                      transition: "all 0.3s ease",
+                    }}
+                  >
+                    Hover
+                  </span>
+                  <span
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: "40px",
+                      padding: "6px 12px",
+                      borderRadius: "20px",
+                      fontSize: "14px",
+                      fontWeight: 500,
+                      color: mode === "click" ? "#fff" : "#71717a",
+                      backgroundColor:
+                        mode === "click" ? "#0fba4b" : "transparent",
+                      transition: "all 0.3s ease",
+                    }}
+                  >
+                    Click
+                  </span>
+                </div>
+              )}
+            </ModeToggleController>
           </div>
-          <ClassSelectList classInfo={classInfo} />
+          <ClassSelectList />
         </div>
       </div>
     </StylePreviewerProvider>

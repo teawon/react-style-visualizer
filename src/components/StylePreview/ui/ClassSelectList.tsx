@@ -1,13 +1,8 @@
 import { useStylePreviewer } from "../context";
 import type { StylePreviewerState } from "../type";
-import type { ClassInfo } from "../type";
 
-interface ClassInfoListProps {
-  classInfo: Record<string, ClassInfo>;
-}
-
-export const ClassSelectList = ({ classInfo }: ClassInfoListProps) => {
-  const { state, dispatch } = useStylePreviewer();
+export const ClassSelectList = () => {
+  const { state, dispatch, classInfo } = useStylePreviewer();
 
   const handleMouseEnter = (
     props: Exclude<StylePreviewerState["classState"], null>

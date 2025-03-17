@@ -7,6 +7,7 @@ import "../accentStyle.css";
 type StylePreviewerContextType = {
   state: StylePreviewerState;
   dispatch: React.Dispatch<Action>;
+  classInfo: Record<string, ClassInfo>;
 };
 
 const StylePreviewerContext = createContext<StylePreviewerContextType>({
@@ -16,6 +17,7 @@ const StylePreviewerContext = createContext<StylePreviewerContextType>({
     element: <div />,
   },
   dispatch: () => {},
+  classInfo: {},
 });
 
 export const StylePreviewerProvider = <T extends Record<string, ClassInfo>>({
@@ -36,7 +38,7 @@ export const StylePreviewerProvider = <T extends Record<string, ClassInfo>>({
   const [state, dispatch] = useStylePreviewerReducer(keyMappedElement);
 
   return (
-    <StylePreviewerContext.Provider value={{ state, dispatch }}>
+    <StylePreviewerContext.Provider value={{ state, dispatch, classInfo }}>
       {children}
     </StylePreviewerContext.Provider>
   );
