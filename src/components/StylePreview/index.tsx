@@ -13,27 +13,38 @@ const StylePreviewer = <T extends Record<string, ClassInfo>>({
 }: StylePreviewerProps<T>) => {
   return (
     <StylePreviewerProvider element={children} classInfo={classInfo}>
-      <div style={{ display: "flex", gap: "20px", padding: "20px" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: "20px",
+          height: "100%",
+          width: "100%",
+        }}
+      >
         <div
           style={{
             display: "flex",
             padding: "20px",
             border: "1px solid #ddd",
             borderRadius: "8px",
-            minWidth: "500px",
-            alignContent: "center",
+            width: "60%",
+            minWidth: "400px",
+            alignItems: "center",
             justifyContent: "center",
+            height: "100%",
+            overflowY: "auto",
           }}
         >
           <HighlightedStyleElement accentClassName={accentClassName} />
         </div>
         <div
           style={{
-            minWidth: "500px",
+            width: "40%",
+            minWidth: "300px",
             padding: "20px",
             border: "1px solid #ddd",
             borderRadius: "8px",
-            maxHeight: "400px",
+            height: "100%",
             overflowY: "auto",
           }}
         >
