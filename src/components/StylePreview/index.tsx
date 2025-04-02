@@ -11,29 +11,48 @@ const StylePreviewer = <T extends Record<string, ClassInfo>>({
   classInfo,
   accentClassName = "react-style-previewer-accent",
 }: StylePreviewerProps<T>) => {
+  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.currentTarget.style.opacity = "1";
+  };
+
+  const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.currentTarget.style.opacity = "0.3";
+  };
+
   return (
     <StylePreviewerProvider element={children} classInfo={classInfo}>
-      <div style={{ display: "flex", gap: "20px", padding: "20px" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: "20px",
+          height: "100%",
+          width: "100%",
+        }}
+      >
         <div
           style={{
             display: "flex",
             padding: "20px",
             border: "1px solid #ddd",
             borderRadius: "8px",
-            minWidth: "500px",
-            alignContent: "center",
+            width: "60%",
+            minWidth: "400px",
+            alignItems: "center",
             justifyContent: "center",
+            height: "100%",
+            overflowY: "auto",
           }}
         >
           <HighlightedStyleElement accentClassName={accentClassName} />
         </div>
         <div
           style={{
-            minWidth: "500px",
+            width: "40%",
+            minWidth: "300px",
             padding: "20px",
             border: "1px solid #ddd",
             borderRadius: "8px",
-            maxHeight: "400px",
+            height: "100%",
             overflowY: "auto",
           }}
         >
@@ -57,7 +76,11 @@ const StylePreviewer = <T extends Record<string, ClassInfo>>({
                     borderRadius: "24px",
                     cursor: "pointer",
                     position: "relative",
+                    opacity: 0.3,
+                    transition: "opacity 0.2s ease",
                   }}
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
                   onClick={toggleMode}
                   role="switch"
                   aria-checked={mode === "click"}
