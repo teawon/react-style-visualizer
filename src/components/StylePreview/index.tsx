@@ -11,6 +11,14 @@ const StylePreviewer = <T extends Record<string, ClassInfo>>({
   classInfo,
   accentClassName = "react-style-previewer-accent",
 }: StylePreviewerProps<T>) => {
+  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.currentTarget.style.opacity = "1";
+  };
+
+  const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.currentTarget.style.opacity = "0.3";
+  };
+
   return (
     <StylePreviewerProvider element={children} classInfo={classInfo}>
       <div
@@ -68,7 +76,11 @@ const StylePreviewer = <T extends Record<string, ClassInfo>>({
                     borderRadius: "24px",
                     cursor: "pointer",
                     position: "relative",
+                    opacity: 0.3,
+                    transition: "opacity 0.2s ease",
                   }}
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
                   onClick={toggleMode}
                   role="switch"
                   aria-checked={mode === "click"}
